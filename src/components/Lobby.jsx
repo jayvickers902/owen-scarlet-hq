@@ -61,7 +61,7 @@ export default function Lobby({ roomCode, playerName, onStartGame, onLeave }) {
                 background: ps.dim, border: `1.5px solid ${ps.color}`,
                 boxShadow: `0 0 10px ${ps.glow}`,
               }}>
-                <span style={{ fontSize: 18 }}>{m === 'Owen' ? '🟢' : m === 'Scarlet' ? '🌸' : '⭐'}</span>
+                <span style={{ fontSize: 18 }}>{m === 'Owen' ? '🔵' : m === 'Scarlet' ? '🌸' : '⭐'}</span>
                 <span style={{ fontWeight: 900, color: ps.color, fontSize: 15 }}>{m}</span>
                 {m === room.host && <span style={{ fontSize: 10, color: 'var(--gold)', fontWeight: 700 }}>HOST</span>}
               </div>
