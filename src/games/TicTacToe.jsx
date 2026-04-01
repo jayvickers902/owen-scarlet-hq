@@ -17,12 +17,13 @@ function getWinner(board) {
   return null
 }
 
-function initState(members) {
+function initState(members, existingScores) {
   return {
     board: Array(9).fill(null),
     turn: members[0],
     result: null,
     markers: { [members[0]]: 'X', [members[1]]: 'O' },
+    scores: existingScores ?? { [members[0]]: 0, [members[1]]: 0 },
   }
 }
 
@@ -43,10 +44,14 @@ export default function TicTacToe({ room, playerName, updateRoom, onBack }) {
 
   async function handleClick(idx) {
     if (!isMyTurn || gs.board[idx] || result) return
-    const newBoard = [...gs.board]
-    newBoard[idx] = myMarker
+    const newBoard  = [...gs.board]
+    newBoard[idx]   = myMarker
     const newResult = getWinner(newBoard)
     const nextTurn  = members.find(m => m !== playerName)
+    const newScores = { ...gs.scores }
+    if (newResult?.winner && newResult.winner !== 'draw') {
+      newScores[newResult.winner] = (newScores[newResult.winner] ?? 0) + 1
+    }
     await updateRoom({
       state: {
         ...room.state,
@@ -55,13 +60,14 @@ export default function TicTacToe({ room, playerName, updateRoom, onBack }) {
           board: newBoard,
           turn: newResult ? gs.turn : nextTurn,
           result: newResult ?? null,
+          scores: newScores,
         }
       }
     })
   }
 
   async function reset() {
-    await updateRoom({ state: { ...room.state, ttt: initState(members) } })
+    await updateRoom({ state: { ...room.state, ttt: initState(members, gs.scores) } })
   }
 
   const winLine = result?.line ?? []
@@ -90,7 +96,8 @@ export default function TicTacToe({ room, playerName, updateRoom, onBack }) {
             }}>
               <div style={{ fontSize: 22, fontWeight: 900, color: ps.color }}>{marker}</div>
               <div style={{ fontWeight: 800, fontSize: 14, color: ps.color, marginTop: 2 }}>{m}</div>
-              {active && <div style={{ fontSize: 11, color: 'var(--txm)', marginTop: 4 }}>YOUR TURN</div>}
+              <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--gold)', marginTop: 2 }}>{gs.scores?.[m] ?? 0}</div>
+              {active && <div style={{ fontSize: 11, color: 'var(--txm)', marginTop: 2 }}>YOUR TURN</div>}
             </div>
           )
         })}

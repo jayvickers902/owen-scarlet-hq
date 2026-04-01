@@ -1,7 +1,7 @@
 export const PLAYERS = ['Owen', 'Scarlet']
 
 export const PLAYER_COLORS = {
-  Owen:    { color: '#4ade80', dim: 'rgba(74,222,128,0.18)', glow: 'rgba(74,222,128,0.4)', text: '#052010', cls: 'owen' },
+  Owen:    { color: '#60a5fa', dim: 'rgba(96,165,250,0.18)', glow: 'rgba(96,165,250,0.4)', text: '#020c1f', cls: 'owen' },
   Scarlet: { color: '#f472b6', dim: 'rgba(244,114,182,0.18)', glow: 'rgba(244,114,182,0.4)', text: '#2d0015', cls: 'scarlet' },
 }
 
