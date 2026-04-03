@@ -28,7 +28,8 @@ export default function Lobby({ roomCode, playerName, onStartGame, onLeave }) {
 
   const members  = room.members || []
   const isHost   = room.host === playerName
-  const canStart = selectedGame && members.length >= 2
+  const selectedGameDef = GAMES.find(g => g.id === selectedGame)
+  const canStart = selectedGame && members.length >= (selectedGameDef?.minPlayers ?? 2)
 
   return (
     <div style={{ maxWidth: 520, margin: '0 auto', padding: '28px 16px', width: '100%' }}>

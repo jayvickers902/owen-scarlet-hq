@@ -4,6 +4,7 @@ import Home from './components/Home'
 import Lobby from './components/Lobby'
 import TicTacToe from './games/TicTacToe'
 import Pictionary from './games/Pictionary'
+import ScienceLab from './games/ScienceLab'
 import { useRoom } from './useRoom'
 
 // Game screen wrapper — loads room state and passes it down
@@ -15,6 +16,7 @@ function GameScreen({ gameId, roomCode, playerName, onBack }) {
 
   if (gameId === 'tictactoe')  return <TicTacToe  {...props} />
   if (gameId === 'pictionary') return <Pictionary {...props} />
+  if (gameId === 'sciencelab') return <ScienceLab playerName={playerName} onBack={onBack} />
   return <div style={{ padding: 40, color: 'var(--txm)' }}>Unknown game.</div>
 }
 

@@ -28,6 +28,14 @@ export const GAMES = [
     minPlayers: 2,
     maxPlayers: 4,
   },
+  {
+    id: 'sciencelab',
+    name: 'Science Lab',
+    emoji: '🔬',
+    description: 'Mix ingredients and discover wild chemical reactions!',
+    minPlayers: 1,
+    maxPlayers: 4,
+  },
 ]
 
 export function makeRoomCode() {
