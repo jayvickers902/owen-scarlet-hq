@@ -209,7 +209,7 @@ function describeFlavors(added) {
 
 function getSauce(added) {
   const ids = new Set(added.map(a => a.id))
-  return SAUCES.find(s => s.needs.every(n => ids.has(n))) ?? null
+  return SAUCES.find(s => s.needs.length === added.length && s.needs.every(n => ids.has(n))) ?? null
 }
 
 function blendColor(added) {
@@ -224,11 +224,14 @@ function blendColor(added) {
   return `rgb(${Math.round(r / added.length)},${Math.round(g / added.length)},${Math.round(b / added.length)})`
 }
 
+const ING_BY_ID = Object.fromEntries(INGREDIENTS.map(i => [i.id, i]))
+
 export default function SauceLab({ onBack }) {
-  const [added, setAdded]         = useState([])
-  const [sauce, setSauce]         = useState(null)
-  const [animKey, setAnimKey]     = useState(0)
-  const [chefNotes, setChefNotes] = useState(null) // string | null
+  const [added, setAdded]           = useState([])
+  const [sauce, setSauce]           = useState(null)
+  const [animKey, setAnimKey]       = useState(0)
+  const [chefNotes, setChefNotes]   = useState(null)
+  const [showRecipes, setShowRecipes] = useState(false)
 
   useEffect(() => {
     const s = getSauce(added)
@@ -269,8 +272,54 @@ export default function SauceLab({ onBack }) {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', width: '100%', marginBottom: 24, gap: 12 }}>
         <button className="btn-ghost" style={{ fontSize: 12 }} onClick={onBack}>← Back</button>
-        <div style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 18 }}>🍳 Sauce Lab</div>
+        <div style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 18, flex: 1 }}>🍳 Sauce Lab</div>
+        <button className="btn-ghost" style={{ fontSize: 12 }} onClick={() => setShowRecipes(true)}>📖 Recipes</button>
       </div>
+
+      {/* Recipe list modal */}
+      {showRecipes && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 100,
+          background: 'rgba(7,9,26,0.92)',
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          padding: '24px 16px', overflowY: 'auto',
+        }}>
+          <div style={{ width: '100%', maxWidth: 560 }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 20, gap: 12 }}>
+              <div style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 18, flex: 1 }}>📖 Sauce Recipes</div>
+              <button className="btn-ghost" style={{ fontSize: 12 }} onClick={() => setShowRecipes(false)}>✕ Close</button>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {SAUCES.map(s => (
+                <div key={s.name} style={{
+                  padding: '12px 16px', borderRadius: 10,
+                  background: `${s.color}18`, border: `1.5px solid ${s.color}55`,
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                    <span style={{ fontSize: 20 }}>{s.emoji}</span>
+                    <span style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 13, color: s.color }}>{s.name}</span>
+                    <span style={{ fontSize: 11, color: 'var(--txm)', marginLeft: 'auto' }}>{s.origin}</span>
+                  </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                    {s.needs.map(id => {
+                      const ing = ING_BY_ID[id]
+                      return (
+                        <span key={id} style={{
+                          padding: '3px 9px', borderRadius: 20, fontSize: 11, fontWeight: 800,
+                          background: `${ing.color}22`, border: `1.5px solid ${ing.color}66`,
+                          color: ing.color,
+                        }}>
+                          {ing.emoji} {ing.name}
+                        </span>
+                      )
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Cooking pot */}
       <div style={{ position: 'relative', marginBottom: 16, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
