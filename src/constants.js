@@ -36,6 +36,14 @@ export const GAMES = [
     minPlayers: 1,
     maxPlayers: 4,
   },
+  {
+    id: 'saucelab',
+    name: 'Sauce Lab',
+    emoji: '🍳',
+    description: 'Mix real ingredients and cook up delicious sauces from around the world!',
+    minPlayers: 1,
+    maxPlayers: 4,
+  },
 ]
 
 export function makeRoomCode() {
